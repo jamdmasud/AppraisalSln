@@ -49,8 +49,8 @@ namespace AppraisalSystem.Areas.Employees.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("DeleteObjective")]
+        [HttpGet]
+        [Route("DeleteObjective/{id}")]
         public IHttpActionResult DeleteObjective([FromBody]string id)
         {
             try

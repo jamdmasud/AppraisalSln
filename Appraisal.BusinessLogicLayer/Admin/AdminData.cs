@@ -159,10 +159,9 @@ namespace Appraisal.BusinessLogicLayer.Admin
 
        private int GetIncreament(int totalScore)
        {
-           int inc = GetUnitOfWork().IncreamentRepository.Get()
-                .Where(a=>a.LowerScore < totalScore && a.UpperScore > totalScore)
-                .Select(s=>s.Promotion).FirstOrDefault();
-           return inc;
+           var increments = GetUnitOfWork().IncreamentRepository.Get().ToList();
+           var inc = increments.FirstOrDefault(a => a.LowerScore <= totalScore && a.UpperScore >= totalScore);
+           return inc?.Promotion ?? 0;
        }
         public object GetAllObjectives()
         {

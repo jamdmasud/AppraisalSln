@@ -20,22 +20,27 @@ namespace Appraisal.BusinessLogicLayer.Core
             {
                 body = message + "<br/><br/>Best Regards,<br/> " + sender;
             }
+            if (!String.IsNullOrEmpty(receiver))
+            {
+                MailMessage mail =
+                    new MailMessage(System.Configuration.ConfigurationSettings.AppSettings["FromAddress"], receiver);
+                SmtpClient client = new SmtpClient();
+                System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(
+                    System.Configuration.ConfigurationSettings.AppSettings["FromAddress"],
+                    System.Configuration.ConfigurationSettings.AppSettings["Password"]);
+                client.EnableSsl = true;
+                client.Port = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["SMTPPort"]);
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.DeliveryFormat = SmtpDeliveryFormat.International;
 
-            MailMessage mail = new MailMessage(System.Configuration.ConfigurationSettings.AppSettings["FromAddress"], receiver);
-            SmtpClient client = new SmtpClient();
-            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(System.Configuration.ConfigurationSettings.AppSettings["FromAddress"], System.Configuration.ConfigurationSettings.AppSettings["Password"]);
-            client.EnableSsl = true;
-            client.Port = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["SMTPPort"]);
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.DeliveryFormat = SmtpDeliveryFormat.International;
-
-            client.Host = System.Configuration.ConfigurationSettings.AppSettings["SmtpClient"];
-            client.Credentials = credentials;
-            mail.Subject = "Notification Email";
-            mail.Body = body;
-            mail.IsBodyHtml = true;
-            client.Send(mail);
+                client.Host = System.Configuration.ConfigurationSettings.AppSettings["SmtpClient"];
+                client.Credentials = credentials;
+                mail.Subject = "Notification Email";
+                mail.Body = body;
+                mail.IsBodyHtml = true;
+                client.Send(mail);
+            }
         }
     }
 }
