@@ -224,5 +224,20 @@ namespace AppraisalSystem.Areas.Employees.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetEmployeeWhoHaveNotSubmitedObjective")]
+        public IHttpActionResult GetEmployeeWhoHaveNotSubmitedObjective()
+        {
+            try
+            {
+                JobObjectiveData employeesData = new JobObjectiveData();
+                return Ok(employeesData.GetEmployeeWhoHaveNotSubmitObjective());
+            }
+            catch (Exception EX_NAME)
+            {
+                return BadRequest(EX_NAME.Message);
+            }
+        }
+
     }
 }

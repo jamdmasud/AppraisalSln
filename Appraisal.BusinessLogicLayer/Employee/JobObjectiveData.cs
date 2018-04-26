@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Appraisal.BusinessLogicLayer.Core;
 using RepositoryPattern;
@@ -387,6 +388,24 @@ namespace Appraisal.BusinessLogicLayer.Employee
                 isSubmitSelfAppraisal = s.OverallScore != null
             }).ToList();
             return empList;
+        }
+
+        public object GetEmployeeWhoHaveNotSubmitObjective()
+        {
+            List<string> employeeIds = GetUnitOfWork().ObjectiveMainRepository.Get(a => a.IsActive == true)
+                .Select(s => s.EmployeeId).ToList();
+            var employee = GetUnitOfWork().EmployeeRepository.Get().Where(a => !employeeIds.Contains(a.EmployeeId))
+                            .Select(s => new
+                            {
+                                EmployeeNumber = s.EmployeeId,
+                                s.EmployeeName,
+                                s.Email,
+                                Section = s.Section.Name,
+                                Department = s.Section.Department.Name,
+                                Designation = s.Designation.Name
+                            })
+                            .ToList();
+            return employee;
         }
     }
 }
