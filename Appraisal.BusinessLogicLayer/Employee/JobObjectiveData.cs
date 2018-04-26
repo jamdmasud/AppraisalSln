@@ -402,7 +402,8 @@ namespace Appraisal.BusinessLogicLayer.Employee
                                 s.Email,
                                 Section = s.Section.Name,
                                 Department = s.Section.Department.Name,
-                                Designation = s.Designation.Name
+                                Designation = s.Designation.Name,
+                                ReportTo = s.Employee2.EmployeeName
                             })
                             .ToList();
             return employee;
