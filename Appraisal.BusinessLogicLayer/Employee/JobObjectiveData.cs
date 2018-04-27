@@ -403,9 +403,9 @@ namespace Appraisal.BusinessLogicLayer.Employee
                                 Section = s.Section.Name,
                                 Department = s.Section.Department.Name,
                                 Designation = s.Designation.Name,
-                                ReportTo = s.Employee2.EmployeeName
+                                ReportToName = s.Employee2?.EmployeeName ?? ""
                             })
-                            .ToList();
+                            .ToList().OrderBy(o => o.Department).ToList();
             return employee;
         }
     }
