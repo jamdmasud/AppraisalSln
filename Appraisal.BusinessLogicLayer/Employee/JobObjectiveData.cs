@@ -410,5 +410,24 @@ namespace Appraisal.BusinessLogicLayer.Employee
                             .ToList().OrderBy(o => o.Department).ToList();
             return employee;
         }
+
+        public object GetEmployeeWhoHaveNotSubmitJobDescription()
+        {
+            List<string> employeeIds = GetUnitOfWork().JobDescriptionRepository.Get()
+                .Select(s => s.EmployeeId).ToList();
+            var employee = GetUnitOfWork().EmployeeRepository.Get().Where(a => !employeeIds.Contains(a.EmployeeId))
+                            .Select(s => new
+                            {
+                                EmployeeNumber = s.EmployeeId,
+                                s.EmployeeName,
+                                s.Email,
+                                Section = s.Section.Name,
+                                Department = s.Section.Department.Name,
+                                Designation = s.Designation.Name,
+                                ReportToName = s.Employee2?.EmployeeName ?? ""
+                            })
+                            .ToList().OrderBy(o => o.Department).ToList();
+            return employee;
+        }
     }
 }

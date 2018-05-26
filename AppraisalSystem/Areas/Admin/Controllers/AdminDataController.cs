@@ -1,7 +1,5 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Appraisal.BusinessLogicLayer.Admin;
-using Appraisal.BusinessLogicLayer.HBOU;
 
 namespace AppraisalSystem.Areas.Admin.Controllers
 {

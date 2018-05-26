@@ -27,7 +27,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
         {
             var user = User.Identity.GetUserName();
             EmployeeData employeesData = new EmployeeData(new UnitOfWork());
-           return Ok(employeesData.GetIndividualJobObjective(user));
+            return Ok(employeesData.GetIndividualJobObjective(user));
         }
 
         [HttpGet]
@@ -58,7 +58,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
             }
             catch (Exception EX_NAME)
             {
-               return BadRequest(EX_NAME.Message);
+                return BadRequest(EX_NAME.Message);
             }
         }
 
@@ -93,7 +93,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
                 return BadRequest(EX_NAME.Message);
             }
         }
-        
+
         [HttpGet]
         [Route("GetEmployeeJobDescriptionSingleObject")]
         public IHttpActionResult GetEmployeeJobDescriptionSingleObject()
@@ -133,7 +133,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
         {
             try
             {
-//string userId = User.Identity.GetUserName();
+                //string userId = User.Identity.GetUserName();
                 string userId = User.Identity.GetUserName();
                 JobObjectiveData employeesData = new JobObjectiveData();
                 return Ok(employeesData.GetSelfAppraisalForIndividualEmployee(userId));
@@ -194,7 +194,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
                 return BadRequest(EX_NAME.Message);
             }
         }
-        
+
         [HttpGet]
         [Route("GetEmployeeById/{id}")]
         public IHttpActionResult GetEmployeeById(string id)
@@ -239,5 +239,19 @@ namespace AppraisalSystem.Areas.Employees.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetEmployeeWhoHaveNotSubmitJobDescription")]
+        public IHttpActionResult GetEmployeeWhoHaveNotSubmitJobDescription()
+        {
+            try
+            {
+                JobObjectiveData employeesData = new JobObjectiveData();
+                return Ok(employeesData.GetEmployeeWhoHaveNotSubmitJobDescription());
+            }
+            catch (Exception EX_NAME)
+            {
+                return BadRequest(EX_NAME.Message);
+            }
+        }
     }
 }
