@@ -10,5 +10,6 @@ namespace Appraisal.BusinessLogicLayer
         public string ObjectiveId { get; set; }
         public int Weight { get; set; }
         public string PerformanceAppraisal { get; set; }
+        public string PerformanceComment { get; set; }
     }
 }

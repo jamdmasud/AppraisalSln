@@ -124,6 +124,7 @@ namespace Appraisal.BusinessLogicLayer.HBOU
                         PerformanceAppraisal = s.PerfomenseAppraisal,
                         Comments = s.Comments,
                         Score = s.Score,
+                        s.PerformanceComment,
                         EmployeeCompany = s.ObjectiveMain.Employee.groups,
                         ReportToCompany = s.ObjectiveMain.Employee.Employee2.groups,
                         isSubmitSelfAppraisal = s.ObjectiveMain.OverallScore != null

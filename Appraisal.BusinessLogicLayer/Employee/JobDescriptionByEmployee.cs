@@ -20,7 +20,7 @@ namespace Appraisal.BusinessLogicLayer.Employee
                     throw new Exception("We can't find your job description ");
                 }
                 descriptions.KeyAccountabilities = description.KeyAccountabilities;
-                descriptions.JobPurposes = description.JobPurposes;
+                descriptions.JobPurposes = description.JobPurposes; 
                 descriptions.UpdatedBy = CreatedBy;
                 descriptions.UpdatedDate = DateTime.Now;
                 unitOfWork.JobDescriptionRepository.Update(descriptions);
@@ -43,10 +43,21 @@ namespace Appraisal.BusinessLogicLayer.Employee
             }
             unitOfWork.Save();
             EmailNotifier notifier = new EmailNotifier();
-            string email = unitOfWork.EmployeeRepository.Get().FirstOrDefault(a => a.EmployeeId == CreatedBy)?.Employee2?.Email;
-            string sender = unitOfWork.EmployeeRepository.Get().FirstOrDefault(a => a.EmployeeId == CreatedBy)?.EmployeeName;
-            if (String.IsNullOrEmpty(email))
-                notifier.Send("/#/MyEmployee?id=" + CreatedBy, "Dear sir,<br/> I have submited my job description on " + DateTime.Now.Date + ".", email, sender);
+            RepositoryPattern.Employee employee = unitOfWork.EmployeeRepository.Get().FirstOrDefault(a => a.EmployeeId == CreatedBy);
+            if (employee != null)
+            {
+                string sender = employee.EmployeeName;
+                employee = employee.Employee2;
+                if (employee != null)
+                {
+                    string email = employee.Email;
+                    if (String.IsNullOrEmpty(email))
+                        notifier.Send("/#/MyEmployee?id=" + CreatedBy, "Dear sir,<br/> I have submited my job description on " + DateTime.Now.Date + ".", email, sender);
+
+                }
+
+            }
+
         }
     }
 }

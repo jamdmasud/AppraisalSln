@@ -51,7 +51,7 @@ namespace AppraisalSystem.Areas.Employees.Controllers
 
         [HttpGet]
         [Route("DeleteObjective/{id}")]
-        public IHttpActionResult DeleteObjective([FromBody]string id)
+        public IHttpActionResult DeleteObjective(string id)
         {
             try
             {
@@ -91,11 +91,29 @@ namespace AppraisalSystem.Areas.Employees.Controllers
                 var weight = list.Sum(a => a.Weight);
                 JobObjective activities = new JobObjective(new UnitOfWork());
                 activities.CreatedBy = User.Identity.GetUserName();
-                if (validation.IsJobObjectiveDeadLineValid(activities.CreatedBy))
+                if (!validation.IsJobObjectiveDeadLineValid(activities.CreatedBy))
                 {
                     return BadRequest("You have missed your deadline");
                 }
                 activities.SavePerformanceAppraisal(list);
+                return Ok(ActionMessage.SaveMessage);
+            }
+            catch (Exception EX_NAME)
+            {
+                return BadRequest(EX_NAME.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("AllowToEditSelfAppraisal/{id}")]
+        public IHttpActionResult AllowToEditSelfAppraisal(string id)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id)) return BadRequest("Employee can't be empty.");
+
+                JobObjective objective = new JobObjective(new UnitOfWork());
+                objective.AllowToEditSelfAppraisal(id);
                 return Ok(ActionMessage.SaveMessage);
             }
             catch (Exception EX_NAME)

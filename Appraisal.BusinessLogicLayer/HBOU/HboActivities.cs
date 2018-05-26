@@ -21,6 +21,7 @@ namespace Appraisal.BusinessLogicLayer.HBOU
             if (desc != null)
             {
                 desc.IsHOBUConfirmed = false;
+                desc.IsReportToConfirmed = false;
                 desc.HOBUConfirmedDate = DateTime.Now;
                 GetUnitOfWork().Save();
             }
@@ -91,6 +92,23 @@ namespace Appraisal.BusinessLogicLayer.HBOU
         public void Dispose()
         {
             throw new NotImplementedException();
+        }
+
+        public void DisapproveObjective(string id)
+        {
+            var objectiveSub = GetUnitOfWork().ObjectiveSubRepository.Get(a => a.Id == id).FirstOrDefault();
+            if(objectiveSub != null)
+            {
+                objectiveSub.IsObjectiveApproved = false;
+                objectiveSub.UpdatedBy = CreatedBy;
+                objectiveSub.UpdatedDate = DateTime.Now;
+                GetUnitOfWork().ObjectiveSubRepository.Update(objectiveSub);
+                GetUnitOfWork().Save();
+            }
+            else
+            {
+                throw new Exception("Objective not found!");
+            }
         }
     }
 }

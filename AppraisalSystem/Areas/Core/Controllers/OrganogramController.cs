@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 
 namespace AppraisalSystem.Areas.Core.Controllers
 {
+   
     [Authorize]
     [RoutePrefix("api/Core/Organogram")]
     public class OrganogramController : ApiController

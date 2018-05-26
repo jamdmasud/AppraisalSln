@@ -49,6 +49,37 @@ namespace Appraisal.BusinessLogicLayer.Admin
             return main;
         }
 
+        public object GetAppraisalInformation()
+        {
+            var main =
+               GetUnitOfWork()
+                   .ObjectiveSubRepository.Get()
+                   .Where(a => a.ObjectiveMain.TotalScore != null && a.ObjectiveMain.IsActive == true)
+                   .Select(s => new
+                   {
+                       EmployeeId = s.ObjectiveMain.EmployeeId,
+                       EmployeeName = s.ObjectiveMain.Employee.EmployeeName,  
+                       Department = s.ObjectiveMain.Employee.Section.Department.Name,
+                       Section = s.ObjectiveMain.Employee.Section.Name,  
+                       ReportToName = s.ObjectiveMain.Employee.Employee2.EmployeeName,  
+                       TotalScore = s.ObjectiveMain.TotalScore,
+                       Increament = GetIncreament(s.ObjectiveMain.TotalScore ?? 0) + "%",
+                       s.Target,
+                       s.Title,
+                       s.Weight,
+                       s.KPI,
+                       s.Note,
+                       s.SelfAppraisal,
+                       s.Comments,
+                       s.PerfomenseAppraisal,
+                       s.PerformanceComment, 
+                       s.Score,
+                       s.EvidenceFile
+                   }).OrderBy(a => a.Department).ThenBy(t => t.EmployeeId)
+                   .ToList();
+            return main;
+        }
+
         public object GetAllDeletedEmployees()
         {
             var main =

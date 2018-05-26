@@ -69,8 +69,11 @@ namespace Appraisal.BusinessLogicLayer.Admin
                     sub.PerfomenseAppraisal = Convert.ToDecimal(poco.PerformanceAppraisal);
                     sub.Score = Convert.ToInt32((poco.Weight / 5.00) * Convert.ToDouble(sub.PerfomenseAppraisal));
                     totalScore += sub.Score ?? 0;
+                    sub.PerformanceComment = poco.PerformanceComment;
                     sub.UpdatedDate = DateTime.Now;
                     sub.UpdatedBy = CreatedBy;
+                    sub.PerfomenseAppraisalBy = CreatedBy;
+                    sub.PerfomenseAppraisalDate = DateTime.Now;
                     GetUnitOfWork().ObjectiveSubRepository.Update(sub);
                 }
                 else
@@ -82,6 +85,40 @@ namespace Appraisal.BusinessLogicLayer.Admin
             if (main != null)
             {
                 main.TotalScore = totalScore;
+                GetUnitOfWork().ObjectiveMainRepository.Update(main);
+            }
+            GetUnitOfWork().Save();
+        }
+
+        public void AllowToEditSelfAppraisal(string employeId)
+        {
+            var main = GetUnitOfWork().ObjectiveMainRepository.Get(a=>a.EmployeeId == employeId && a.IsActive == true).FirstOrDefault();
+
+
+            var list = GetUnitOfWork().ObjectiveSubRepository.Get(a => a.ObjectiveMainId == main.Id).ToList();
+            
+            foreach (var sub in list)
+            {
+                if (sub != null)
+                {
+                    sub.PerfomenseAppraisal = null;
+                    sub.Score = null;
+                    
+                    sub.UpdatedDate = DateTime.Now;
+                    sub.UpdatedBy = CreatedBy;
+                    sub.PerfomenseAppraisalBy = CreatedBy;
+                    sub.PerfomenseAppraisalDate = DateTime.Now;
+                    GetUnitOfWork().ObjectiveSubRepository.Update(sub);
+                }
+                else
+                {
+                    throw new Exception("We can't find objective for this employee");
+                }
+            }
+         
+            if (main != null)
+            {
+                main.TotalScore = null;
                 GetUnitOfWork().ObjectiveMainRepository.Update(main);
             }
             GetUnitOfWork().Save();
@@ -113,11 +150,14 @@ namespace Appraisal.BusinessLogicLayer.Admin
 
             if (sub.Id != null)
             {
-                if (weight - sub.Weight > 100)
+                
+                ObjectiveSub ob = GetUnitOfWork().ObjectiveSubRepository.Get().FirstOrDefault(a => a.Id == sub.Id);
+                int currentWeight = (weight - ob.Weight??00);
+                if (currentWeight > 100)
                 {
                     throw new Exception("Weight should not be greater then 100");
                 }
-                ObjectiveSub ob = GetUnitOfWork().ObjectiveSubRepository.Get().FirstOrDefault(a => a.Id == sub.Id);
+
                 if (ob != null)
                 {
                     ob.KPI = sub.KPI;
@@ -165,6 +205,7 @@ namespace Appraisal.BusinessLogicLayer.Admin
                 m.UpdatedDate = DateTime.Now;
                 m.OverallScore = main.OverallScore;
                 m.OverallComment = main.OverallComment;
+                m.PersonalDevelopmentPlan = main.PersonalDevelopmentPlan;
                 m.IsActive = true;
                 GetUnitOfWork().ObjectiveMainRepository.Update(m);
                 InsertSelfAppraisal(main.ObjectiveSub, main.Id);

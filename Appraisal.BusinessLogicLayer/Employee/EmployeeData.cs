@@ -7,17 +7,27 @@ using RepositoryPattern;
 
 namespace Appraisal.BusinessLogicLayer.Employee
 {
+
+    interface IFun
+    {
+        void fun();
+        void fun(int a);
+        void fun(ref int a);  
+    }
+   
     public class EmployeeData :IDisposable
     {
+        
         private readonly UnitOfWork _unitOfWork;
 
         public EmployeeData(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+     
 
         public object GetEmployeeWithJobDescriptionById(string id)
-        {
+        { 
             Validation validation = new Validation(new UnitOfWork());
            
             if (validation.HasSetJobDescription(id))
@@ -109,33 +119,37 @@ namespace Appraisal.BusinessLogicLayer.Employee
         
         public object GetJobObjectiveById(Guid objectiveId)
         {
-            var objective = GetUnitOfWork().ObjectiveMainRepository.Get()
-                .Where(a => a.Id == objectiveId && a.IsActive == true)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.EmployeeId,
-                    s.OverallComment,
-                    s.OverallScore,
-                    s.CreatedBy,
-                    s.CreatedDate,
-                    objectiveSub = s.ObjectiveSub.Select(a => new
+          
+                var objective = GetUnitOfWork().ObjectiveMainRepository.Get()
+                    .Where(a => a.Id == objectiveId && a.IsActive == true)
+                    .Select(s => new
                     {
-                        a.Id,
-                        a.ObjectiveMainId,
-                        a.KPI,
-                        a.Status,
-                        a.Target,
-                        a.Comments,
-                        a.SelfAppraisal,
-                        a.Weight,
-                        a.EvidenceFile,
-                        a.CreatedBy,
-                        a.CreatedDate,
-                        a.Note
-                    })
-                }).ToList();
-            return objective;
+                        s.Id,
+                        s.EmployeeId,
+                        s.OverallComment,
+                        s.OverallScore,
+                        s.CreatedBy,
+                        s.CreatedDate,
+                        objectiveSub = s.ObjectiveSub.Select(a => new
+                        {
+                            a.Id,
+                            a.ObjectiveMainId,
+                            a.KPI,
+                            a.Status,
+                            a.Target,
+                            a.Comments,
+                            a.SelfAppraisal,
+                            a.Weight,
+                            a.EvidenceFile,
+                            a.CreatedBy,
+                            a.CreatedDate,
+                            a.Note
+                        })
+                    }).ToList();
+                return objective;
+            
+            
+
         }
 
         public object GetEmployeeBySupervisorId(string employeeId)

@@ -99,16 +99,16 @@ namespace AppraisalSystem.Areas.JobDescription.Controllers
                 {
                     return BadRequest("Job description id can't be empty");
                 }
-                if (description.KeyAccountabilities == null || description.JobPurposes == null)
+                if (String.IsNullOrEmpty(description.KeyAccountabilities) || String.IsNullOrEmpty(description.JobPurposes))
                 {
                     return BadRequest("Job description KeyAccountabilities or JobPurposes can't be empty");
                 }
                 employee.Save(description);
                 return Ok("Congrats! Updated successfully!");
             }
-            catch (Exception EX_NAME)
+            catch (Exception exName)
             {
-                return BadRequest(EX_NAME.ToString());
+                return BadRequest(exName.ToString());
             }
         }
     }

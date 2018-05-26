@@ -76,8 +76,6 @@ namespace AppraisalSystem.Areas.Admin.Controllers
             activitie.CreatedBy = User.Identity.GetUserName();
             activitie.ChangeJobDescriptionDeadLine(poco);
             return Ok(ActionMessage.SaveMessage);
-        }
-
-
+        } 
     }
 }

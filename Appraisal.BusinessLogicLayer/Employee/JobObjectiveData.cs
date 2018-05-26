@@ -64,6 +64,8 @@ namespace Appraisal.BusinessLogicLayer.Employee
                         s.EmployeeId,
                         s.OverallScore,
                         s.OverallComment,
+                        TotalScore = s.TotalScore ?? -1,
+                        s.PersonalDevelopmentPlan,
                         s.CreatedBy,
                         s.CreatedDate,
                         objectiveSub = s.ObjectiveSub.Where(a=>a.IsObjectiveApproved == true).Select(a => new

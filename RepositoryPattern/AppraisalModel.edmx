@@ -237,6 +237,7 @@
           <Property Name="Status" Type="bit" />
           <Property Name="Title" Type="varchar(max)" />
           <Property Name="Score" Type="int" />
+          <Property Name="PerformanceComment" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="PerformanceAppraisal">
           <Key>
@@ -963,6 +964,7 @@
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Score" Type="Int32" />
           <NavigationProperty Name="ObjectiveMain" Relationship="AppraisalModel.FK_ObjectiveSub_ObjectiveMain" FromRole="ObjectiveSub" ToRole="ObjectiveMain" />
+          <Property Name="PerformanceComment" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PerformanceAppraisal">
           <Key>
@@ -1439,6 +1441,7 @@
           <EntitySetMapping Name="ObjectiveSub">
             <EntityTypeMapping TypeName="AppraisalModel.ObjectiveSub">
               <MappingFragment StoreEntitySet="ObjectiveSub">
+                <ScalarProperty Name="PerformanceComment" ColumnName="PerformanceComment" />
                 <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

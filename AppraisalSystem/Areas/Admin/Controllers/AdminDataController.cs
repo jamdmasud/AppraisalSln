@@ -20,6 +20,16 @@ namespace AppraisalSystem.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Route("GetAppraisalInformation")]
+        [Authorize(Roles = "Super Admin")]
+        public IHttpActionResult GetAppraisalInformation()
+        {
+            AdminData data = new AdminData();
+            var emp = data.GetAppraisalInformation();
+            return Ok(emp);
+        }
+
+        [HttpGet]
         [Route("GetAllDeletedEmployees")]
         [Authorize(Roles = "Super Admin")]
         public IHttpActionResult GetAllDeletedEmployees()
@@ -97,10 +107,6 @@ namespace AppraisalSystem.Areas.Admin.Controllers
         {
             AdminData data = new AdminData();
             return Ok(data.GetIncreamentTableData());
-        }
-
-
-        
-
+        } 
     }
 }

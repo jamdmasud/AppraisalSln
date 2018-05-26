@@ -34,6 +34,7 @@ namespace RepositoryPattern
         public Nullable<bool> Status { get; set; }
         public string Title { get; set; }
         public Nullable<int> Score { get; set; }
+        public string PerformanceComment { get; set; }
     
         public virtual ObjectiveMain ObjectiveMain { get; set; }
     }

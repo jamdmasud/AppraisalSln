@@ -187,7 +187,7 @@ namespace AppraisalSystem.Areas.Admin.Controllers
         {
             try
             {
-                if (id == null)
+                if (String.IsNullOrEmpty(id))
                 {
                     return BadRequest(ActionMessage.NullOrEmptyMessage);
                 }
@@ -195,6 +195,27 @@ namespace AppraisalSystem.Areas.Admin.Controllers
                 activity.CreatedBy = User.Identity.GetUserName();
                 activity.AllowUpdateJobDescriptionByHOBU(id);
                 return Ok(ActionMessage.SaveMessage);
+            }
+            catch (Exception EX_NAME)
+            {
+                return BadRequest(EX_NAME.Message);
+            }
+        }
+        
+        [HttpGet]
+        [Route("DisapproveObjective/{id}")]
+        public IHttpActionResult DisapproveObjective(string id)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    return BadRequest(ActionMessage.NullOrEmptyMessage);
+                }
+                HboActivities activity = new HboActivities();
+                activity.CreatedBy = User.Identity.GetUserName();
+                activity.DisapproveObjective(id);
+                return Ok(ActionMessage.JobObjectiveAllowed);
             }
             catch (Exception EX_NAME)
             {

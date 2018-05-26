@@ -63,12 +63,15 @@ namespace Appraisal.BusinessLogicLayer.Core
         public bool IsValidToUpdateJobDescription(Guid jobDescriptionId)
         {
             if (jobDescriptionId == Guid.Empty) return false;
-            bool result =
-                GetUnitOfWork()
-                    .JobDescriptionRepository
-                    .Get()
-                    .Where(a=>a.Id == jobDescriptionId)
-                    .Select(s=>s.IsReportToConfirmed).FirstOrDefault()??false;
+            JobDescription description = GetUnitOfWork()
+                .JobDescriptionRepository
+                .Get().FirstOrDefault(a => a.Id == jobDescriptionId);
+            bool result = false;
+            if (description != null)
+            {
+                result = description.IsReportToConfirmed ?? false;
+            }
+           
             return result;
         }
 
